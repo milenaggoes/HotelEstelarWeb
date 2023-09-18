@@ -1,30 +1,23 @@
-import NavBar from "@/components/NavBar";
 import DataRow from "./DataRow";
-
-async function getReservas(){
-  const url = "http://localhost:8080/api/reservas"
-  const resp = await fetch(url, { next: { revalidate: 0 } })
-  if (!resp.ok) throw new Error("Não pode carregar os dados")
-  return resp.json()
-}
+import Button from "@/components/Button";
+import { CreditCardIcon } from "@heroicons/react/24/outline";
+import { getReservas } from "@/actions/reservas";
 
 export default async function Home() {
-
-  const data = await getReservas();
-  
+  const data = await getReservas()
   return (
     <>
-      <NavBar active={"reservas"}/>
-      <main className="px-20 py-14">
-        <h1 className="text-center mb-16 ">Selecione um de nossos quartos disponíveis</h1>
-          <div id="data" className="flex justify-evenly flex-wrap ">
-          {data.map(()=>{
-            return(<DataRow reserva={reserva}/>)
-                
-            })}
-            
-          </div>
-        
+      <NavBar active={"reservas"} />
+      <main className="bg-slate-900 m-20 p-12 rounded-xl">
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Reservas</h2>
+          <Button href="/reservas/new" icon={<CreditCardIcon className="h-6 w-6" />}>
+            criar conta
+          </Button>
+        </div>
+        <div id="data" className="text-slate-300 m-1">
+          {data.map(reserva => <DataRow reserva={reserva} /> )}
+        </div>
       </main>
     </>
   )
