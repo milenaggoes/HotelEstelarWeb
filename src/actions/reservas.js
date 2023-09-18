@@ -1,8 +1,6 @@
-"use server"
-
 import { revalidatePath } from "next/cache"
 
-const url = "http://localhost:3000/api/reservas"
+const url = process.env.NEXT_PUBLIC_BASE_URL + "/reservas"
 
 export async function create(formData) {
     const options = {
