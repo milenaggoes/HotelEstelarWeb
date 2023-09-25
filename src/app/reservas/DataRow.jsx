@@ -12,7 +12,7 @@ export default function DataRow({reserva}) {
             <div className="flex items-center">
                 <span>R$ 300.00</span>
                 <span className="invisible group-hover/row:visible" >
-                    <DropMenu />    
+                    <DropMenu  reserva={reserva}/>    
                 </span>
             </div>
         </div>

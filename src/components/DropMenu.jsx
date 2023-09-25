@@ -1,20 +1,51 @@
 "use client"
-
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { ChevronDown } from 'lucide-react';
+import { destroy } from '@/actions/contas';
+import toast from 'react-hot-toast';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { useRouter } from 'next/navigation';
 
 
-export default function DropMenu() {
+export default function DropMenu({ reserva }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const { push } = useRouter()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleDelete = async () => {
+    const resp = await destroy(reserva.id)
+    if (resp?.error) {
+      toast.error(resp.error, { style: { background: '#333', color: '#FFF' } })
+      return
+    }
+    toast.success("reserva apagada com sucesso", { style: { background: '#333', color: '#FFF' } })
+  }
+
+  const handleEdit = () => {
+    push(`/reservas/${reserva.id}/edit`)
+  }
+
 
   return (
     <div>
@@ -36,8 +67,26 @@ export default function DropMenu() {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>apagar</MenuItem>
-        <MenuItem onClick={handleClose}>editar</MenuItem>
+        <AlertDialog>
+          <AlertDialogTrigger>
+            <MenuItem>apagar</MenuItem>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Tem certeza?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Essa ação não pode ser desfeita. Todos os dados da reserva serão perdidos.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>cancelar</AlertDialogCancel>
+              <AlertDialogAction onClick={handleDelete}>sim, pode apagar essa reserva</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
+
+        <MenuItem onClick={handleEdit}>editar</MenuItem>
       </Menu>
     </div>
   );
