@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { ChevronDown } from 'lucide-react';
-import { destroy } from '@/actions/contas';
+import { destroy } from '@/actions/reservas';
 import toast from 'react-hot-toast';
 
 import {
